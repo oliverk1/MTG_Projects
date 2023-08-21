@@ -15,7 +15,7 @@ def collection():
     return collectionList
 
 def deck():
-    file = open("deck.txt", "r")
+    file = open("./deck.txt", "r")
     deck = file.read()
     deckList = deck.split("\n")
     deckList = [i.split(" ", 1) for i in deckList]
@@ -45,12 +45,8 @@ def cardInCollection(collectionList, deckList):
             cardsMissing.append(row)
     return cardsMissing
 
-def getCardInfo(cardsMissing):
-    count = 0
-    for row in cardsMissing:
-        card = row[1]
-        response = requests.get("https://api.scryfall.com/cards/named?fuzzy="+card)
-        info = response.json()
+def getPrice(info,row):
+    if 'prices' in info:
         prices = info['prices']
         priceNormal = str(prices['eur'])
         if priceNormal == "None":
@@ -58,10 +54,24 @@ def getCardInfo(cardsMissing):
         else:
             priceNormal = round((float(prices['eur'])*0.86326101), 2)
             priceNormal = float(priceNormal) * float(row[0])
+    else:
+        priceNormal = "NA"
+    return priceNormal
+
+def getCardInfo(cardsMissing):
+    count = 0
+    for row in cardsMissing:
+        card = row[1]
+        response = requests.get("https://api.scryfall.com/cards/named?fuzzy="+card)
+        info = response.json()
+        priceNormal = getPrice(info,row)
         name = str(row[0]) + "x" + " " + str(card) + " " + "£" + str(priceNormal) + ".png"
         name = name.replace("/","-")
-        img = info['image_uris']
-        pngURL = img['png']
+        if 'image_uris' in info:
+            img = info['image_uris']
+            pngURL = img['png']
+        else:
+            img = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg/revision/latest?cb=20140813141013"
         img_data = requests.get(pngURL).content
         with open(name, 'wb') as handler:
             handler.write(img_data)
