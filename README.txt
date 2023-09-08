@@ -5,3 +5,4 @@ API-MTG-CardFinder(NOEXCHANGERATE).py: Further API experimentation with .json. I
 API-MTG-AutofillDownloadCardAndInventory.py: Combination of Autofill and CardFinder. Textbox will autofill card name and upon a button press append the card to "inventory.txt" and saves a png of the card including the price.
 DeckCost(No)Download.py: Written to integrate inventory and deck collection files from https://www.moxfield.com/. Will return the cost to build the deck and what cards are missing. Downloads a .png of the card with price in name.
 mtg_text_img_identifier.py: Accesses the webcam to take a photo of a card. Compares image and text of card with .jpg of MTG cards and returns the closest match to identify which card has been photographed.
+HowToUpgradeNewDeck.py: This was made as I had upgraded my deck and forgot what I took out and what I needed to replace them with. This will search for missing cards and tell you what was taken out and what new cards were introduced.
